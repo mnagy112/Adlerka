@@ -212,3 +212,6 @@ V cykle môžeme následne vypísať tie dáta z článku ktoré chceme, teda `n
 ```
 
 Tak a po refreshi stránky vidíme náš článok na vrchu nášho view. Môžeme skúsiť pridať ďalší článok pomocou **tinkera** a overiť či sa nám aj ten zobrazí na stránke.
+
+Link na verziu repozitára po prvom cvičení:
+https://github.com/mnagy112/Adlerka/tree/99554ec15ceb81410e32a379792199b6721f4e73

@@ -64,10 +64,6 @@
         </style>
     </head>
     <body>
-        @foreach($articles as $article)
-            Nazov: {{ $article->name }}<br/>
-            Obsah: {{ $article->content }}<br/><br/>
-        @endforeach
         <div class="flex-center position-ref full-height">
             @if (Route::has('login'))
                 <div class="top-right links">
