@@ -6,7 +6,7 @@
 
     @foreach($articles as $article)
 
-        Nazov: {{ $article->name }}<br/>
+        Nazov: <a href="{{ route('articles.show', ['article' => $article->id]) }}">{{ $article->name }}</a><br/>
         Obsah: {{ $article->content }}<br/>
         <form action="{{ route('articles.destroy', ['article' => $article->id]) }}" method="post">
             @csrf

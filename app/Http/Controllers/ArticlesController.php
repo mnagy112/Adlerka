@@ -56,12 +56,18 @@ class ArticlesController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param $id
+     * @return void
      */
     public function show($id)
     {
-        //
+        $article = Article::find($id);
+
+        if (!$article) {
+            abort(404);
+        }
+
+        return view('articles.show')->with(['article' => $article]);
     }
 
     /**
@@ -72,7 +78,13 @@ class ArticlesController extends Controller
      */
     public function edit($id)
     {
-        //
+        $article = Article::find($id);
+
+        if (!$article) {
+            abort(404);
+        }
+
+        return view('articles.edit')->with(['article' => $article]);
     }
 
     /**
@@ -84,7 +96,20 @@ class ArticlesController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'name' => 'required',
+            'content' => 'required',
+        ], [
+            'name.required' => 'Pole Meno je povinne',
+            'content.required' => 'Pole Obsah je povinne',
+        ]);
+
+        $article = Article::find($id);
+        $article->name = $request['name'];
+        $article->content = $request['content'];
+        $article->save();
+
+        return redirect()->route('articles.show', ['article' => $article->id]);
     }
 
     /**
