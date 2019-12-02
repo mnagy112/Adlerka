@@ -5,6 +5,7 @@
     Nazov: {{ $article->name }}<br/>
     Obsah: {{ $article->content }}<br/>
 
-    <a href="{{ route('articles.edit', ['article' => $article->id]) }}">EDIT</a>
-
+    @if(Auth::user() && Auth::user() == $article->user)
+        <a href="{{ route('articles.edit', ['article' => $article->id]) }}">EDIT</a>
+    @endif
 @endsection

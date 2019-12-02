@@ -4,9 +4,28 @@ namespace App\Http\Controllers;
 
 use App\Article;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ArticlesController extends Controller
 {
+
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this
+            ->middleware('loggedIn')
+            ->except([
+                'index',
+                'create',
+                'store',
+                'show'
+            ]);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -48,7 +67,13 @@ class ArticlesController extends Controller
         $article = new Article();
         $article->name = $request['name'];
         $article->content = $request['content'];
-        $article->save();
+
+        if(Auth::user()) {
+            Auth::user()->articles()->save($article);
+        }
+        else {
+            $article->save();
+        }
 
         return redirect()->route('articles.index');
     }
@@ -84,6 +109,10 @@ class ArticlesController extends Controller
             abort(404);
         }
 
+        if(!Auth::user() || Auth::user() != $article->user) {
+            return abort(401);
+        }
+
         return view('articles.edit')->with(['article' => $article]);
     }
 
@@ -96,6 +125,12 @@ class ArticlesController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $article = Article::find($id);
+
+        if(!Auth::user() || Auth::user() != $article->user) {
+            return abort(401);
+        }
+
         $request->validate([
             'name' => 'required',
             'content' => 'required',
@@ -104,7 +139,6 @@ class ArticlesController extends Controller
             'content.required' => 'Pole Obsah je povinne',
         ]);
 
-        $article = Article::find($id);
         $article->name = $request['name'];
         $article->content = $request['content'];
         $article->save();
