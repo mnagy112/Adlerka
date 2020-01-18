@@ -40,4 +40,12 @@ class User extends Authenticatable
     public function articles () {
         return $this->hasMany(Article::class);
     }
+
+    public static function boot() {
+        parent::boot();
+
+        static::deleting(function($user) {
+            $user->articles()->delete();
+        });
+    }
 }

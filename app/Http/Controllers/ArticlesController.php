@@ -29,11 +29,18 @@ class ArticlesController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param Request $request
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $articles = Article::all();
+        $articles = Article::orderBy('created_at', $request->input('order') ?? 'desc');
+
+        if ($request->input('user') != null) {
+            $articles = $articles->where('user_id', $request->input('user'));
+        }
+
+        $articles = $articles->get();
 
         return view('articles.index')->with(['articles' => $articles]);
     }
